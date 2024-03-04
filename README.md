@@ -1,1 +1,3 @@
 # ocr-demo
+
+This demo showcases an innovative application designed to enhance user interaction by enabling file uploads and facilitating question-and-answer sessions about the uploaded content. The application integrates advanced OCR technology with a sophisticated GPT-based chat model to interpret and respond to user inquiries. The front end is constructed using Flask, a lightweight WSGI web application framework, and HTML, ensuring a seamless and interactive user experience.

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        function previewFile() {
+            var preview = document.getElementById('filePreview');
+            var file    = document.getElementById('fileInput').files[0];
+            var reader  = new FileReader();
+    
+            reader.onloadend = function () {
+                preview.src = reader.result;
+                preview.style.display = 'block';
+            }
+    
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = "";
+                preview.style.display = 'none';
+            }
+        }
+    </script>
+    <title>Chat with AI</title>
+    <style>
+        /* Add your existing CSS styles here */
+        .chat-container {
+            max-width: 800px;
+            margin: auto;
+            background-color: #f2f2f2;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .message {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        .user, .assistant {
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+        .user { background-color: #72726e; color: white; text-align: right; }
+        .assistant { background-color: #eaeaea; text-align: left; }
+        .chat-input, .chat-submit, .chat-upload {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .chat-input { border: 1px solid #ddd; }
+        .chat-submit, .chat-upload { 
+            border: none; 
+            background-color: #626260; 
+            color: white; 
+            cursor: pointer; 
+        }
+        .upload-btn-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+        .btn {
+            border: 2px solid gray;
+            color: gray;
+            background-color: white;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .upload-btn-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <img src="{{ url_for('static', filename='the_portopiccolo_group_logo.jpg') }}" alt="Group Logo" style="max-width: 100px;"/> <!-- Add this line -->
+        <h1>ChatDOC - Chat with Documents</h1>
+        <div id="conversation">
+            {% for message in conversation_m %}
+                <div class="message {{ message.role }}">
+                    <strong>{{ message.role }}:</strong> {{ message.content }}
+                </div>
+            {% endfor %}
+        </div>
+        <form action="/" method="post">
+            <textarea class="chat-input" name="message" placeholder="Type your message..."></textarea>
+            <input type="submit" value="Send" class="chat-submit">
+        </form>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <div class="upload-btn-wrapper">
+                <button class="btn">Upload a file</button>
+                <input type="file" name="file" onchange="form.submit()">
+            </div>
+        </form>
+        
+        {% if image is not none %}
+        <img src="{{ image }}" alt="Uploaded Image" style="max-width: 500px;"/>
+        {% endif %}
+
+        <form action="/restart" method="post">
+            <input type="submit" value="Restart Conversation" class="chat-submit">
+        </form>
+    </div>
+</body>
+</html>
