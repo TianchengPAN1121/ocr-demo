@@ -4,6 +4,9 @@ import os
 from PIL import Image
 import pytesseract
 from werkzeug.utils import secure_filename
+from dotenv import load_dotenv
+
+
 
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png'}
@@ -11,7 +14,8 @@ ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png'}
 app = Flask(__name__)
 app.secret_key = '123'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-openai.api_key = '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'
+load_dotenv('environment.env')
+openai.api_key = os.getenv('openai')
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
